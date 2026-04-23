@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Type("articles")
-@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Article {
 	@Id
 	private String id;

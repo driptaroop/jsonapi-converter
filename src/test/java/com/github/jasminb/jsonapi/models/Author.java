@@ -11,7 +11,7 @@ import com.github.jasminb.jsonapi.annotations.Type;
 import java.util.Collection;
 
 @Type("people")
-@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Author {
 	@Id
 	private String id;
