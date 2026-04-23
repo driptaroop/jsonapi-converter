@@ -1,8 +1,8 @@
 package com.github.jasminb.jsonapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import com.github.jasminb.jsonapi.exceptions.InvalidJsonApiResourceException;
 import com.github.jasminb.jsonapi.exceptions.ResourceParseException;
 import com.github.jasminb.jsonapi.models.errors.Errors;
@@ -37,7 +37,7 @@ public class ValidationUtils {
 		if (hasErrors) {
 			try {
 				throw new ResourceParseException(ErrorUtils.parseError(mapper, resourceNode, Errors.class));
-			} catch (JsonProcessingException e) {
+			} catch (JacksonException e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -170,7 +170,7 @@ public class ValidationUtils {
 	}
 
 	private static boolean hasContainerNode(JsonNode dataNode, String attribute) {
-		return dataNode.hasNonNull(attribute) && dataNode.get(attribute).isContainerNode();
+		return dataNode.hasNonNull(attribute) && isContainer(dataNode.get(attribute));
 	}
 
 	private static boolean hasValueNode(JsonNode dataNode, String attribute) {
@@ -179,7 +179,7 @@ public class ValidationUtils {
 
 	private static boolean hasContainerOrNull(JsonNode dataNode, String attribute) {
 		if (dataNode.hasNonNull(attribute)) {
-			return dataNode.get(attribute).isContainerNode();
+			return isContainer(dataNode.get(attribute));
 		}
 		return true;
 	}
@@ -189,6 +189,10 @@ public class ValidationUtils {
 			return dataNode.get(attribute).isValueNode();
 		}
 		return true;
+	}
+
+	private static boolean isContainer(JsonNode node) {
+		return node.isObject() || node.isArray();
 	}
 
 }
